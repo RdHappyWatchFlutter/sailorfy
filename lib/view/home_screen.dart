@@ -22,12 +22,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-  final DashBoardController dashBoardController = Get.put(DashBoardController());
+  final DashBoardController dashBoardController =
+      Get.put(DashBoardController());
 
   @override
   void initState() {
-    dashBoardController.currentPage = FirstHomePage(number: widget.number,);
+    dashBoardController.currentPage = FirstHomePage(
+      number: widget.number,
+    );
 
     dashBoardController.pages = <Widget>[
       FirstHomePage(number: widget.number),
@@ -47,9 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: Colors.transparent,
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(22.0.h),
-              child: Center(
-                  child: StaticAppBar(
-                      number: widget.number, dashBoardController: controller)),
+              child: StaticAppBar(
+                  number: widget.number, dashBoardController: controller),
             ),
             body: controller.currentPage,
           );

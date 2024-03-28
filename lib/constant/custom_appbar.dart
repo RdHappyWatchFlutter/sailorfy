@@ -23,19 +23,23 @@ class CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 20.0.h,
+        height: 26.0.h,
         width: 100.0.w,
-        padding: EdgeInsets.symmetric(horizontal: 5.0.w, vertical: 0.0.h),
+        alignment: Alignment.bottomCenter,
+        padding: EdgeInsets.symmetric(
+          horizontal: 5.0.w,
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
-              height: 6.0.h,
+              margin: const EdgeInsets.only(top: 10, bottom: 10),
+              height: 5.0.h,
               child: ListTile(
                 title: Text(
                   'Your KYC details are not verified',
-                  style: TextStyle(color: Colors.black, fontSize: 15.sp),
+                  style: TextStyle(color: Colors.black, fontSize: 14.sp),
                 ),
                 trailing: GestureDetector(
                   onTap: () {
@@ -50,7 +54,7 @@ class CustomAppBar extends StatelessWidget {
                     'Complete\nKYC',
                     style: TextStyle(
                         color: Colors.blue,
-                        fontSize: 14.sp,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.w600),
                     maxLines: 2,
                     textAlign: TextAlign.center,
@@ -64,7 +68,8 @@ class CustomAppBar extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 3.0.h,
-                  backgroundImage: CachedNetworkImageProvider('https://sailorfy.searchosis.com'+'/files/inno.png',
+                  backgroundImage: CachedNetworkImageProvider(
+                      'https://sailorfy.searchosis.com' + '/files/inno.png',
                       errorListener: (obj) {
                     Container();
                   }),
@@ -118,7 +123,7 @@ class CustomAppBar extends StatelessWidget {
             ),
             Container(
               height: 6.0.h,
-              margin: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(top: 10, bottom: 5),
               child: TextFormField(
                 decoration: InputDecoration(
                     border: OutlineInputBorder(

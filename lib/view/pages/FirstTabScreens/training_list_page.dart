@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:salorify/controller/dashboard_controller.dart';
 import 'package:salorify/model/training_list_data_model.dart';
 import 'package:salorify/view/static_app_bar.dart';
@@ -29,7 +28,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
     "Marine Catering",
     "Marine Engineering",
   ];
-  Widget _buildTrainingListView(String title,List<TrainingList> data) {
+  Widget _buildTrainingListView(String title, List<TrainingList> data) {
     return Padding(
       padding: const EdgeInsets.only(left: 15, top: 10),
       child: Column(
@@ -51,10 +50,10 @@ class _TrainingListPageState extends State<TrainingListPage> {
               // physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return _buildTrainingCard(
-                    data[index].name,
-                    data[index].courseDuration,
-                    data[index].courseRating ?? 1.0,
-                    data[index].courseAttachment?? '',
+                  data[index].name,
+                  data[index].courseDuration,
+                  data[index].courseRating ?? 1.0,
+                  data[index].courseAttachment ?? '',
                 );
               },
             ),
@@ -64,7 +63,12 @@ class _TrainingListPageState extends State<TrainingListPage> {
     );
   }
 
-  Widget _buildTrainingCard(String name,String duration,double rating,String image,) {
+  Widget _buildTrainingCard(
+    String name,
+    String duration,
+    double rating,
+    String image,
+  ) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.6,
       margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
@@ -72,16 +76,15 @@ class _TrainingListPageState extends State<TrainingListPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 140,
+            height: 135,
             decoration: BoxDecoration(
-              image: DecorationImage(
-                image: CachedNetworkImageProvider('https://sailorfy.searchosis.com'+'/files/inno.png'),
-                fit: BoxFit.cover,
-                onError: (obj,stk){
-                  Center();
-                }
-              )
-            ),
+                image: DecorationImage(
+                    image: const CachedNetworkImageProvider(
+                        'https://sailorfy.searchosis.com' + '/files/inno.png'),
+                    fit: BoxFit.cover,
+                    onError: (obj, stk) {
+                      Center();
+                    })),
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -89,14 +92,17 @@ class _TrainingListPageState extends State<TrainingListPage> {
             ),
             child: Text(
               name,
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              maxLines:
+                  3, // Change this to the number of lines you want to show
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 5),
             child: Text(
               duration,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 10,
                   color: Colors.black,
                   fontWeight: FontWeight.w400),
@@ -109,7 +115,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
             direction: Axis.horizontal,
             allowHalfRating: true,
             itemCount: 5,
-            itemBuilder: (context, _) => Icon(
+            itemBuilder: (context, _) => const Icon(
               Icons.star,
               color: Colors.amber,
             ),
@@ -130,6 +136,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               StaticAppBar(
                   dashBoardController: widget.dashBoardController,
@@ -157,30 +164,31 @@ class _TrainingListPageState extends State<TrainingListPage> {
                 ),
               ),
               FutureBuilder<List<TrainingList>>(
-                future: widget.dashBoardController.getTrainingList(),
-                builder: (context,AsyncSnapshot<List<TrainingList>> response) {
-                  if(!response.hasData || response.hasError){
-                    return Center(
-                        child: LoadingAnimationWidget.prograssiveDots(color: Colors.black, size: 20.0));
-                  }else{
-                    final list = response.data;
-                    return _buildTrainingListView('Popular Training',list!);
-                  }
-
-                }
-              ),
+                  future: widget.dashBoardController.getTrainingList(),
+                  builder:
+                      (context, AsyncSnapshot<List<TrainingList>> response) {
+                    if (!response.hasData || response.hasError) {
+                      return Center(
+                          child: LoadingAnimationWidget.prograssiveDots(
+                              color: Colors.black, size: 20.0));
+                    } else {
+                      final list = response.data;
+                      return _buildTrainingListView('Popular Training', list!);
+                    }
+                  }),
               FutureBuilder<List<TrainingList>>(
-                future: widget.dashBoardController.getPopularTrainingList(),
-                builder: (context,AsyncSnapshot<List<TrainingList>> response) {
-                  if(!response.hasData || response.hasError){
-                    return Center(child: LoadingAnimationWidget.prograssiveDots(color: Colors.black, size: 20.0));
-                  }else{
-                    final list = response.data;
-                    return _buildTrainingListView('Marine Training',list!);
-                  }
-
-                }
-              ),
+                  future: widget.dashBoardController.getPopularTrainingList(),
+                  builder:
+                      (context, AsyncSnapshot<List<TrainingList>> response) {
+                    if (!response.hasData || response.hasError) {
+                      return Center(
+                          child: LoadingAnimationWidget.prograssiveDots(
+                              color: Colors.black, size: 20.0));
+                    } else {
+                      final list = response.data;
+                      return _buildTrainingListView('Marine Training', list!);
+                    }
+                  }),
             ],
           ),
         ),
