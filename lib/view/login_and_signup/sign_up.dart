@@ -304,9 +304,7 @@ class _SignUpState extends State<SignUp> {
                     && loginController.indosNoController.text.isNotEmpty
                     && loginController.mobileController.text.isNotEmpty){
                   dashBoardController.loading = true;
-                  setState(() {
-
-                  });
+                  setState(() {});
                   try{
                    var userData = await dashBoardController.getUserData(
                        loginController.mobileController.text.removeAllWhitespace);

@@ -1,3 +1,5 @@
+/*
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -6,6 +8,7 @@ import 'package:salorify/view/static_app_bar.dart';
 import 'package:salorify/view/training_list_page.dart';
 
 import '../../constant/responsive.dart';
+import 'FirstTabScreens/verification_page.dart';
 
 class FirstHomePage extends StatefulWidget {
   final String number;
@@ -117,39 +120,44 @@ class _FirstHomePageState extends State<FirstHomePage> {
                               ),
                             ),
                           ),
-                          Container(
-                            width: 40.0.w,
-                            margin: EdgeInsets.symmetric(vertical: 2.0.h,horizontal: 1.0.w),
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    colors: [
-                                      Colors.redAccent,
-                                      Colors.red.shade200,
-                                    ]
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> VerificationPage()));
+                            },
+                            child: Container(
+                              width: 40.0.w,
+                              margin: EdgeInsets.symmetric(vertical: 2.0.h,horizontal: 1.0.w),
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                      colors: [
+                                        Colors.redAccent,
+                                        Colors.red.shade200,
+                                      ]
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0)
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        'Verification',style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Icon(Icons.model_training,
+                                        size: 40.0,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                borderRadius: BorderRadius.circular(10.0)
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      'Verification',style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Icon(Icons.model_training,
-                                      size: 40.0,
-                                    ),
-                                  ),
-                                ],
                               ),
                             ),
                           ),
@@ -225,3 +233,4 @@ class _FirstHomePageState extends State<FirstHomePage> {
     );
   }
 }
+*/

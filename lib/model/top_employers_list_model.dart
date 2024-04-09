@@ -36,24 +36,25 @@ class TopEmployersList {
   dynamic comments;
   dynamic assign;
   dynamic likedBy;
-  String firstName;
-  String middleName;
-  String lastName;
-  String fullName;
+  dynamic firstName;
+  dynamic middleName;
+  dynamic lastName;
+  dynamic fullName;
   String emailId;
   String phoneNumber;
   dynamic data6;
-  DateTime dateOfBirth;
+  dynamic dateOfBirth;
   String country;
   String state;
   String city;
   String fullAddress;
-  String gender;
+  dynamic gender;
   String pincode;
   String rpslNo;
-  String pic;
+  dynamic pic;
   int age;
   int topEmployeer;
+  String companyName;
 
   TopEmployersList({
     required this.name,
@@ -85,6 +86,7 @@ class TopEmployersList {
     required this.pic,
     required this.age,
     required this.topEmployeer,
+    required this.companyName,
   });
 
   factory TopEmployersList.fromJson(Map<String, dynamic> json) => TopEmployersList(
@@ -106,7 +108,7 @@ class TopEmployersList {
     emailId: json["email_id"],
     phoneNumber: json["phone_number"],
     data6: json["data_6"],
-    dateOfBirth: DateTime.parse(json["date_of_birth"]),
+    dateOfBirth: json["date_of_birth"],
     country: json["country"],
     state: json["state"],
     city: json["city"],
@@ -117,6 +119,7 @@ class TopEmployersList {
     pic: json["pic"],
     age: json["age"],
     topEmployeer: json["top_employeer"],
+    companyName: json["company_name"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -138,7 +141,7 @@ class TopEmployersList {
     "email_id": emailId,
     "phone_number": phoneNumber,
     "data_6": data6,
-    "date_of_birth": "${dateOfBirth.year.toString().padLeft(4, '0')}-${dateOfBirth.month.toString().padLeft(2, '0')}-${dateOfBirth.day.toString().padLeft(2, '0')}",
+    "date_of_birth": dateOfBirth,
     "country": country,
     "state": state,
     "city": city,
@@ -149,5 +152,6 @@ class TopEmployersList {
     "pic": pic,
     "age": age,
     "top_employeer": topEmployeer,
+    "company_name": companyName,
   };
 }

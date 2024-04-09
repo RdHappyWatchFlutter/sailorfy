@@ -72,9 +72,6 @@ class LoginController extends GetxController{
         headers: apiFunction.headers,
         body: body
     );
-    print('check User');
-    print(response.statusCode);
-    print(response.body);
     if(response.statusCode == 200){
       return true;
     }else{
@@ -92,13 +89,11 @@ class LoginController extends GetxController{
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "*",
     };
-    print(number);
     final response = await http.post(
       Uri.parse(api),
       headers: setHeaders(),
 
     );
-    print(response.body);
     if(response.statusCode == 200){
       LoginResponse loginResponse = LoginResponse.fromJson(jsonDecode(response.body));
       return loginResponse;

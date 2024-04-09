@@ -1,14 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:salorify/constant/bottom_bar.dart';
 import 'package:salorify/controller/dashboard_controller.dart';
 import 'package:salorify/model/certificate_list_model.dart';
 
 class CertificateList extends StatefulWidget {
-  const CertificateList({super.key});
+  final String number;
+  const CertificateList({super.key, required this.number});
 
   @override
   State<CertificateList> createState() => _CertificateListState();
@@ -16,6 +19,7 @@ class CertificateList extends StatefulWidget {
 
 class _CertificateListState extends State<CertificateList> {
   final DashBoardController dashBoardController = Get.put(DashBoardController());
+  bool isDownloading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +34,7 @@ class _CertificateListState extends State<CertificateList> {
         ),
       ),
       body: FutureBuilder<List<ActiveCertificateList>>(
-          future: dashBoardController.getCertificateList(),
+          future: dashBoardController.getCertificateList(widget.number),
           initialData: [],
           builder: (context,AsyncSnapshot<List<ActiveCertificateList>> response) {
             if(!response.hasData || response.hasError){
@@ -57,6 +61,7 @@ class _CertificateListState extends State<CertificateList> {
                 shrinkWrap: true,
 
                 itemBuilder: (context, index) {
+
                   return GestureDetector(
                     onTap: () {
 
@@ -91,7 +96,7 @@ class _CertificateListState extends State<CertificateList> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(data[index].certifiedCourse,
+                                    Text(data[index].courseName,
                                       style: TextStyle(fontWeight: FontWeight.w900),
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
@@ -114,7 +119,30 @@ class _CertificateListState extends State<CertificateList> {
                                     ),
                                     SizedBox(height: 5.0,),
                                     GestureDetector(
-                                      onTap: (){},
+                                      onTap: (){
+                                        FileDownloader.downloadFile(
+                                            url: 'https://sailorfy.searchosis.com'+data[index].certificatePdf,
+                                            name: data[index].name+DateTime.now().toLocal().toString(),//(optional)
+                                            onProgress: (fileName, progress) {
+                                              isDownloading = true;
+                                              setState(() {
+
+                                              });
+                                              print('FILE fileName HAS PROGRESS $progress');
+                                            },
+                                            onDownloadCompleted: (String path) {
+                                              print('FILE DOWNLOADED TO PATH: $path');
+                                              isDownloading = false;
+                                              setState(() {
+
+                                              });
+                                            },
+                                            onDownloadError: (String error) {
+                                              print('DOWNLOAD ERROR: $error');
+                                            },
+                                          downloadDestination: DownloadDestinations.publicDownloads,
+                                        );
+                                      },
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         crossAxisAlignment: CrossAxisAlignment.center,

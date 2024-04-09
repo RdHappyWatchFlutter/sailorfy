@@ -10,6 +10,7 @@ import 'package:salorify/model/top_employers_list_model.dart';
 import 'package:salorify/model/training_list_data_model.dart';
 import 'package:salorify/view/pages/FirstTabScreens/training_list_page.dart';
 
+import '../../../model/training_list.dart';
 import '../../../widget/reusible_training.dart';
 import 'certificate_list.dart';
 import 'traning_details_page.dart';
@@ -72,7 +73,7 @@ class _FirstHomePageState extends State<FirstHomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CertificateList(),
+                          builder: (context) => CertificateList(number: widget.number,),
                         ),
                       );
                     },
@@ -85,7 +86,7 @@ class _FirstHomePageState extends State<FirstHomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => VerificationPage(),
+                          builder: (context) => VerificationPage(number: widget.number,),
                         ),
                       );
                     },
@@ -105,111 +106,7 @@ class _FirstHomePageState extends State<FirstHomePage> {
                 ],
               ),
             ),
-            FutureBuilder<List<ActiveTrainingList>>(
-                future: dashBoardController.getActiveTrainingList(),
-                builder: (context,
-                    AsyncSnapshot<List<ActiveTrainingList>> response) {
-                  if (!response.hasData || response.hasError) {
-                    return Container();
-                  } else {
-                    final data = response.data![0];
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Active Training',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TraningDetailsPage(data),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 140,
-                            margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Card(
-                                color: Colors.white,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height: 120.0,
-                                      width: 70.0,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                              color: Colors.grey.shade50)),
-                                      child: const Icon(Icons.sunny_snowing,
-                                          color: Colors.yellow, size: 50.0),
-                                    ),
-                                    const SizedBox(width: 20.0),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          data.instituteName,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w900),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 5),
-                                          child: Text(
-                                              dashBoardController.getDuration(
-                                                  data.endDate,
-                                                  data.startDate)),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(bottom: 30),
-                                          child: RatingBar.builder(
-                                            initialRating:
-                                                data.courseRating == ''
-                                                    ? 1.0
-                                                    : double.parse(
-                                                        data.courseRating),
-                                            minRating: 1,
-                                            itemSize: 12,
-                                            direction: Axis.horizontal,
-                                            allowHalfRating: true,
-                                            itemCount: 5,
-                                            itemBuilder: (context, _) => Icon(
-                                              Icons.star,
-                                              color: Colors.amber,
-                                            ),
-                                            onRatingUpdate: (rating) {
-                                              print(rating);
-                                            },
-                                          ),
-                                        )
-                                      ],
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                    )
-                                  ],
-                                )),
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                }),
+
             FutureBuilder<List<TrainingList>>(
                 future: dashBoardController.getPopularTrainingList(),
                 builder: (context, AsyncSnapshot<List<TrainingList>> response) {
@@ -249,7 +146,7 @@ class _FirstHomePageState extends State<FirstHomePage> {
                       ],
                     );
                   } else {
-                    final data = response.data![0];
+                    final data = response.data;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -269,19 +166,34 @@ class _FirstHomePageState extends State<FirstHomePage> {
                             scrollDirection: Axis.horizontal,
                             // physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
-                              return Container(
-                                width: MediaQuery.of(context).size.width * 0.6,
-                                height: 140,
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 8),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  image: DecorationImage(
-                                      image: CachedNetworkImageProvider(
-                                          'https://sailorfy.searchosis.com' +
-                                              data.courseAttachment
-                                                  .toString())),
-                                  borderRadius: BorderRadius.circular(10.0),
+                              return GestureDetector(
+                                onTap: (){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => TraningDetailsPage(
+                                        courseName: data![index].name,
+
+                                        courseNo:
+                                          data[index].reference,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width * 0.6,
+                                  height: 140,
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    image: DecorationImage(
+                                        image: CachedNetworkImageProvider(
+                                            'https://sailorfy.searchosis.com' +
+                                                '/files/inno.png'
+                                                    .toString())),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
                                 ),
                               );
                             },
@@ -342,9 +254,9 @@ class _FirstHomePageState extends State<FirstHomePage> {
                         SizedBox(
                           height: 400,
                           child: ListView.builder(
-                            itemCount: data!.length, // Example itemCount
+                            itemCount: data!.length >2 ? 2 : data.length, // Example itemCount
                             shrinkWrap: true,
-
+                            physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {},
@@ -371,8 +283,7 @@ class _FirstHomePageState extends State<FirstHomePage> {
                                                 shape: BoxShape.circle,
                                                 image: DecorationImage(
                                                     image: CachedNetworkImageProvider(
-                                                        'https://sailorfy.searchosis.com' +
-                                                            data[index].pic),
+                                                        'https://sailorfy.searchosis.com' + '/files/inno.png' ),
                                                     fit: BoxFit.cover,
                                                     onError: (obj, stk) {
                                                       Center();
@@ -384,18 +295,14 @@ class _FirstHomePageState extends State<FirstHomePage> {
                                           SizedBox(width: 20.0),
                                           Expanded(
                                             child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  data[index].fullName,
+                                                  data[index].name,
                                                   style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w900),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                      fontWeight: FontWeight.w900),
+                                                  overflow: TextOverflow.ellipsis,
                                                   maxLines: 2,
                                                 ),
                                                 Text(data[index].city),

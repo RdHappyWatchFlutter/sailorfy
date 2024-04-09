@@ -9,6 +9,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:salorify/api_function.dart';
 import 'package:salorify/controller/authentication_controller.dart';
 import 'package:salorify/controller/dashboard_controller.dart';
+import 'package:salorify/model/user_data_model.dart';
 import 'package:salorify/view/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -111,6 +112,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
                     });
                     if(loginController.enteredOtp == widget.otp){
+                      UserDataModel u = await dashBoardController.getUserData();
                       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                       await sharedPreferences.setBool("loggedIn", true);
                       await sharedPreferences.setString("mobileNo", widget.mobileNo.removeAllWhitespace);

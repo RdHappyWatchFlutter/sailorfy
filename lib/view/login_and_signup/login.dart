@@ -67,12 +67,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
               betweenPadding: 1.0.w,
               onInputChanged: (phone) {
-                print(phone.code);
+/*                print(phone.code);
                 print(phone.dial_code);
                 print(phone.number);
                 print(phone.rawFullNumber);
                 print(phone.rawNumber);
-                print(phone.rawDialCode);
+                print(phone.rawDialCode);*/
                 loginController.intPhoneNumber = phone;
                 loginController.phoneNumberController.text = phone.number;
                 setState(() {
@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       if(isRegistered){
                         try{
                           LoginResponse loginResponse = await loginController.sendOtp(
-                              loginController.intPhoneNumber.number.replaceAll(' ', ''),loginController.otp);
+                              loginController.intPhoneNumber.number.removeAllWhitespace,loginController.otp);
                           print('done');
                           if(loginResponse.code == 200) {
                             dashBoardController.loading = false;

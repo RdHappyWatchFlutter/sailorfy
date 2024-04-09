@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:salorify/controller/dashboard_controller.dart';
+import 'package:salorify/model/training_detail.dart';
 import 'package:salorify/model/training_list_data_model.dart';
+import 'package:salorify/view/pages/FirstTabScreens/traning_details_page.dart';
 import 'package:salorify/view/static_app_bar.dart';
 
 import '../../../constant/responsive.dart';
+import '../../../model/training_list.dart';
 
 class TrainingListPage extends StatefulWidget {
   final DashBoardController dashBoardController;
@@ -49,11 +52,19 @@ class _TrainingListPageState extends State<TrainingListPage> {
               scrollDirection: Axis.horizontal,
               // physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return _buildTrainingCard(
-                  data[index].name,
-                  data[index].courseDuration,
-                  data[index].courseRating ?? 1.0,
-                  data[index].courseAttachment ?? '',
+                return GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> TraningDetailsPage(
+                      courseName: data[index].name,
+                      courseNo: data[index].name,
+                    )));
+                  },
+                  child: _buildTrainingCard(
+                    data[index].name,
+                    '5 months',
+                    1.0,
+                    '/files/inno.png',
+                  ),
                 );
               },
             ),
@@ -141,6 +152,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
               StaticAppBar(
                   dashBoardController: widget.dashBoardController,
                   number: widget.number),
+
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
                 child: Wrap(
@@ -163,8 +175,9 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       .toList(),
                 ),
               ),
+
               FutureBuilder<List<TrainingList>>(
-                  future: widget.dashBoardController.getTrainingList(),
+                  future: widget.dashBoardController.getPopularTrainingList(),
                   builder:
                       (context, AsyncSnapshot<List<TrainingList>> response) {
                     if (!response.hasData || response.hasError) {

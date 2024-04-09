@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:salorify/view/login_and_signup/kyc_screen.dart';
 import 'package:salorify/view/login_and_signup/login.dart';
+import 'package:salorify/view/pages/my_trainings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -19,6 +20,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: ListView(
         children: [
           ListTile(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> MyTrainings(number: widget.number)));
+            },
             leading: CircleAvatar(
               backgroundColor: Colors.purple,
                 child: Icon(Icons.model_training,color: Colors.white,)),

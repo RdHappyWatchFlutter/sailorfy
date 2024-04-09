@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:salorify/api_function.dart';
-import 'package:salorify/model/active_training_list_model.dart';
+import 'package:salorify/model/all_training_list_model.dart';
 import 'package:salorify/model/certificate_list_model.dart';
 import 'package:salorify/model/top_employers_list_model.dart';
 import 'package:salorify/model/training_list_data_model.dart';
@@ -13,7 +13,11 @@ import 'package:salorify/model/user_data_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 
+import '../model/active_training_list_model.dart';
+import '../model/training_list.dart';
+
 class DashBoardController extends GetxController{
+  late TabController tabController;
   final ApiFunction apiFunction = Get.put(ApiFunction());
   bool loading = false;
   int currentIndex = 0;
@@ -27,14 +31,19 @@ class DashBoardController extends GetxController{
     update();
   }
   Future<List<UserData>> getUserData(number)async{
-
     String api = 'https://sailorfy.searchosis.com/api/resource/Member?fields=["*"]&filters=[["mobile_number", "=" , "$number"]]';
     var headers = {
       'Authorization': 'Token 006676296815f35:ee861eab5787f8d',
       'Cookie': 'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
     };
     var response = await apiFunction.getMethod(api, headers);
-
+/*{data: [{name: Employee0002, creation: 2024-02-29 18:16:15.213617, modified: 2024-03-21 12:44:09.922590,
+modified_by: Administrator, owner: Administrator, docstatus: 0, idx: 0, _user_tags: null,
+_comments: null, _assign: null, _liked_by: null, first_name: Ankit, middle_name: Singh,
+ last_name: Chauhan, full_name: Ankit Singh Chauhan, email_id: ankit@gmail.com,
+  phone_number: 9999823454, data_6: null, date_of_birth: 2000-01-24, country: India,
+   state: Haryana, city: Gurugrame, full_address: Gurugrame, gender: Male, pincode: 123456,
+    rpsl_no: 1234, pic: /files/inno.png, age: 20, top_employeer: 1}]}*/
     if(response['data'] != null ){
 
       UserDataModel userDataModel = UserDataModel.fromJson(response);
@@ -75,6 +84,7 @@ class DashBoardController extends GetxController{
     var response = await apiFunction.getMethod(api, headers);
 
     if(response != null){
+
       TrainingListDataModel trainingListDataModel = TrainingListDataModel.fromJson(response);
       List<TrainingList> trainingList = trainingListDataModel.data;
       update();
@@ -83,38 +93,20 @@ class DashBoardController extends GetxController{
       throw response.reasonPhrase.toString();
     }
   }
-  Future<List<ActiveTrainingList>> getActiveTrainingList()async{
+  Future<List<ActiveCertificateList>> getCertificateList(number)async{
 
-    String api = 'https://sailorfy.searchosis.com/api/resource/Enroll Member?fields=["name","reference","institute_name","member","full_name","member_email","mobile_number","course_offered","course_rating","start_date","end_date"]&filters=[["member","=", "99999"]]&limit=100&order_by=name%20desc';/*    String api = 'https://sailorfy.searchosis.com/api/resource/Enroll Member?fields='
-        '["name","course_offered","course_rating","is_popular","course_duration",'
-        '"cost","institute_name","description","location","course_attachment"]&limit=100&order_by=name%20desc'
-        '&filters=[["is_popular", "=" , "1"]]';*/
+    String api = 'https://sailorfy.searchosis.com/api/resource/Certification?'
+        'fields=["name","institute_id","institute_name","member","full_name",'
+        '"member_email","mobile_number","course_id","course_name","course_rating",'
+        '"course_durauion","certification_number","certificate_pdf",'
+        '"certification_issued_date"]&limit=100&order_by=name%20desc'
+        '&filters=[["mobile_number","=","$number"]]';
     var headers = {
       'Authorization': 'Token 006676296815f35:ee861eab5787f8d',
       'Cookie': 'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
     };
     var response = await apiFunction.getMethod(api, headers);
-    if(response != null){
-      ActiveTrainingListModel activeTrainingListModel = ActiveTrainingListModel.fromJson(response);
-      List<ActiveTrainingList> activeTrainingList = activeTrainingListModel.data;
 
-      update();
-      return activeTrainingList;
-    }else{
-      throw response.reasonPhrase.toString();
-    }
-  }
-  Future<List<ActiveCertificateList>> getCertificateList()async{
-
-    String api = 'https://sailorfy.searchosis.com/api/resource/Certification?fields='
-        '["name","reference","certified_course","course_durauion","course_rating","certification_number",'
-        '"member","full_name","member_email","mobile_number","certification_issued_date","certificate_pdf"]&'
-        'filters=[["member","=", "99999"]]&limit=100&order_by=name%20desc';
-    var headers = {
-      'Authorization': 'Token 006676296815f35:ee861eab5787f8d',
-      'Cookie': 'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
-    };
-    var response = await apiFunction.getMethod(api, headers);
     if(response != null){
       CertificateListModel certificateListModel = CertificateListModel.fromJson(response);
       List<ActiveCertificateList> certificateList = certificateListModel.data;
@@ -128,7 +120,76 @@ class DashBoardController extends GetxController{
   Future<List<TopEmployersList>> getTopEmployersList()async{
 
     String api = 'https://sailorfy.searchosis.com/api/resource/Employeer?'
-        'fields=["*"]&filters=[["top_employeer","=", "1"]]&limit=100&order_by=name%20desc';
+        'fields=["*"]&filters=[["top_employeer","=","1"]]';
+    var headers = {
+      'Authorization': 'Token 006676296815f35:ee861eab5787f8d',
+      'Cookie': 'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
+    };
+    var response = await apiFunction.getMethod(api, headers);
+
+    if(response != null){
+      TopEmployersListModel topEmployersListModel = TopEmployersListModel.fromJson(response);
+      List<TopEmployersList> topEmployersList = topEmployersListModel.data;
+
+      update();
+      return topEmployersList;
+    }else{
+      throw response.reasonPhrase.toString();
+    }
+  }
+  Future<List<AllTrainingList>> getAllTrainingList(number)async{
+
+    String api = 'https://sailorfy.searchosis.com/api/resource/Enroll Member'
+        '?fields=["reference","status","institute_name","member","course_offered",'
+        '"course_rating","start_date","end_date","member_email","full_name",'
+        '"mobile_number","enroll_request"]&limit=100&order_by=name%20desc'
+        '&filters=[["mobile_number","=","$number"]]';
+    var headers = {
+      'Authorization': 'Token 006676296815f35:ee861eab5787f8d',
+      'Cookie': 'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
+    };
+    var response = await apiFunction.getMethod(api, headers);
+
+    if(response != null){
+      AllTrainingListModel allTrainingListModel = AllTrainingListModel.fromJson(response);
+      List<AllTrainingList> allTrainingList = allTrainingListModel.data;
+      update();
+      return allTrainingList;
+    }else{
+      throw response.reasonPhrase.toString();
+    }
+  }
+  Future<List<AllTrainingList>> getOnGoingTrainingList(number)async{
+
+    String api = 'https://sailorfy.searchosis.com/api/resource/Enroll Member'
+        '?fields=["reference","status","institute_name","member","course_offered",'
+        '"course_rating","start_date","end_date","member_email","full_name",'
+        '"mobile_number","enroll_request"]&limit=100&order_by=name%20desc'
+        '&filters=[["mobile_number","=","$number"],["status","=","Ongoing"]]';
+    var headers = {
+      'Authorization': 'Token 006676296815f35:ee861eab5787f8d',
+      'Cookie': 'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
+    };
+    var response = await apiFunction.getMethod(api, headers);
+
+    if(response != null){
+      AllTrainingListModel allTrainingListModel = AllTrainingListModel.fromJson(response);
+      List<AllTrainingList> allTrainingList = allTrainingListModel.data;
+
+      print(allTrainingList.length);
+      update();
+      return allTrainingList;
+    }else{
+      throw response.reasonPhrase.toString();
+    }
+  }
+  Future<List<AllTrainingList>> getHistoryTrainingList(number)async{
+
+    String api = 'https://sailorfy.searchosis.com/api/resource/Enroll Member'
+        '?fields=["reference","status","institute_name","member","course_offered",'
+        '"course_rating","start_date","end_date","member_email","full_name",'
+        '"mobile_number","enroll_request"]&limit=100&order_by=name%20desc'
+        '&filters=[["mobile_number","=","$number"],["status","=","Completed"]]';
     var headers = {
       'Authorization': 'Token 006676296815f35:ee861eab5787f8d',
       'Cookie': 'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
@@ -138,13 +199,13 @@ class DashBoardController extends GetxController{
     if(response != null){
       print(response);
 
-      TopEmployersListModel topEmployersListModel = TopEmployersListModel.fromJson(response);
+      AllTrainingListModel allTrainingListModel = AllTrainingListModel.fromJson(response);
       print('object1');
-      List<TopEmployersList> topEmployersList = topEmployersListModel.data;
+      List<AllTrainingList> allTrainingList = allTrainingListModel.data;
 
-      print(topEmployersList.length);
+      print(allTrainingList.length);
       update();
-      return topEmployersList;
+      return allTrainingList;
     }else{
       throw response.reasonPhrase.toString();
     }
@@ -266,6 +327,34 @@ class DashBoardController extends GetxController{
     } catch (e) {
       image = File('');
       return image;
+    }
+  }
+  Future enrollNow(
+      String member,
+      String courseId,
+      String instituteId
+      ) async {
+    var headers = {
+      'Authorization': 'Token 006676296815f35:ee861eab5787f8d',
+      'Cookie': 'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
+    };
+    Map<String, String> body = {
+      'member': member,
+      'institute_id': instituteId,
+      'course_id': courseId
+    };
+    print(jsonEncode(body));
+    var response = await http.post(
+        Uri.parse('https://sailorfy.searchosis.com/api/resource/Enroll Request?fields=[*]'),
+      body: jsonEncode(body),
+      headers: headers
+    );
+    print(response.body);
+    if (response.statusCode == 200) {
+      print(response.body);
+      return jsonDecode(response.body);
+    }else{
+      throw response.reasonPhrase.toString();
     }
   }
 }

@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
               LoginScreen()), (Route<dynamic> route) => false);
         } else {
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-              HomeScreen(number: mobileNo,)), (Route<dynamic> route) => false);
+              HomeScreen(number: '7777777777',)), (Route<dynamic> route) => false);
         }
       }
     });

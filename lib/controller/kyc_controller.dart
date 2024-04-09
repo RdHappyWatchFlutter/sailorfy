@@ -12,6 +12,16 @@ import '../widget/show_aler_box.dart';
 import 'dashboard_controller.dart';
 
 class KycController extends GetxController {
+
+
+  KycController._privateConstructor();
+
+  static final KycController instance = KycController._privateConstructor();
+
+  factory KycController() {
+    return instance;
+  }
+
   final dashboardController = Get.find<DashBoardController>();
   final formPrimaryDetails = GlobalKey<FormState>();
   final formAddress = GlobalKey<FormState>();
