@@ -1,19 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:salorify/controller/dashboard_controller.dart';
-import 'package:salorify/model/active_training_list_model.dart';
+import 'package:salorify/controller/training_controller.dart';
 import 'package:salorify/model/top_employers_list_model.dart';
-import 'package:salorify/model/training_list_data_model.dart';
 import 'package:salorify/view/pages/FirstTabScreens/training_list_page.dart';
 
 import '../../../model/training_list.dart';
 import '../../../widget/reusible_training.dart';
+import '../trainings/active_trainings.dart';
+import '../trainings/popular_trainings.dart';
 import 'certificate_list.dart';
-import 'traning_details_page.dart';
+import '../trainings/traning_details_page.dart';
 import 'verification_page.dart';
 
 class FirstHomePage extends StatefulWidget {
@@ -28,6 +28,8 @@ class FirstHomePage extends StatefulWidget {
 class _FirstHomePageState extends State<FirstHomePage> {
   final DashBoardController dashBoardController =
       Get.put(DashBoardController());
+  final TrainingController trainingController =
+      Get.put(TrainingController());
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,6 @@ class _FirstHomePageState extends State<FirstHomePage> {
                         MaterialPageRoute(
                           builder: (context) => TrainingListPage(
                             number: widget.number,
-                            dashBoardController: dashBoardController,
                           ),
                         ),
                       );
@@ -106,103 +107,62 @@ class _FirstHomePageState extends State<FirstHomePage> {
                 ],
               ),
             ),
-
-            FutureBuilder<List<TrainingList>>(
-                future: dashBoardController.getPopularTrainingList(),
-                builder: (context, AsyncSnapshot<List<TrainingList>> response) {
-                  if (!response.hasData || response.hasError) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Popular Training',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 200,
-                          child: ListView.builder(
-                            itemCount: 4, // Example itemCount
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            // physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return Container(
-                                width: MediaQuery.of(context).size.width * 0.6,
-                                height: 140,
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 8),
-                                decoration: BoxDecoration(
-                                  color: Colors.orange,
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    );
-                  } else {
-                    final data = response.data;
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Popular Training',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 200,
-                          child: ListView.builder(
-                            itemCount: 4, // Example itemCount
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            // physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: (){
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => TraningDetailsPage(
-                                        courseName: data![index].name,
-
-                                        courseNo:
-                                          data[index].reference,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width * 0.6,
-                                  height: 140,
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    image: DecorationImage(
-                                        image: CachedNetworkImageProvider(
-                                            'https://sailorfy.searchosis.com' +
-                                                '/files/inno.png'
-                                                    .toString())),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                }),
+            Container(
+              height: 180.0,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Active Training',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    ActiveTrainings(),
+                  ],
+                )
+            ),
+            Container(
+              height: 250.0,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Popular Training',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    PopularTraining(
+                    ),
+                  ],
+                )
+            ),/*
+            Container(
+              height: 250.0,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Marine Training',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    PopularTraining(
+                    ),
+                  ],
+                )
+            ),*/
             FutureBuilder<List<TopEmployersList>>(
                 future: dashBoardController.getTopEmployersList(),
                 builder:

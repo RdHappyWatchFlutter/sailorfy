@@ -3,18 +3,14 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:salorify/api_function.dart';
 import 'package:salorify/model/all_training_list_model.dart';
 import 'package:salorify/model/certificate_list_model.dart';
 import 'package:salorify/model/top_employers_list_model.dart';
-import 'package:salorify/model/training_list_data_model.dart';
 import 'package:salorify/model/user_data_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 
-import '../model/active_training_list_model.dart';
-import '../model/training_list.dart';
 
 class DashBoardController extends GetxController{
   late TabController tabController;
@@ -49,46 +45,6 @@ _comments: null, _assign: null, _liked_by: null, first_name: Ankit, middle_name:
       UserDataModel userDataModel = UserDataModel.fromJson(response);
       update();
       return userDataModel.data;
-    }else{
-      throw response.reasonPhrase.toString();
-    }
-  }
-  Future<List<TrainingList>> getTrainingList()async{
-    String api = 'https://sailorfy.searchosis.com/api/resource/Course Offered?fields='
-        '["name","course_offered","course_rating","is_popular","course_duration",'
-        '"cost","institute_name","description","location","course_attachment"]&limit=100&order_by=name%20desc';
-    var headers = {
-      'Authorization': 'Token 006676296815f35:ee861eab5787f8d',
-      'Cookie': 'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
-    };
-    var response = await apiFunction.getMethod(api, headers);
-
-    if(response != null){
-      TrainingListDataModel trainingListDataModel = TrainingListDataModel.fromJson(response);
-      List<TrainingList> trainingList = trainingListDataModel.data;
-      update();
-      return trainingList;
-    }else{
-      throw response.reasonPhrase.toString();
-    }
-  }
-  Future<List<TrainingList>> getPopularTrainingList()async{
-    String api = 'https://sailorfy.searchosis.com/api/resource/Course Offered?fields='
-        '["name","course_offered","course_rating","is_popular","course_duration",'
-        '"cost","institute_name","description","location","course_attachment"]&limit=100&order_by=name%20desc'
-        '&filters=[["is_popular", "=" , "1"]]';
-    var headers = {
-      'Authorization': 'Token 006676296815f35:ee861eab5787f8d',
-      'Cookie': 'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
-    };
-    var response = await apiFunction.getMethod(api, headers);
-
-    if(response != null){
-
-      TrainingListDataModel trainingListDataModel = TrainingListDataModel.fromJson(response);
-      List<TrainingList> trainingList = trainingListDataModel.data;
-      update();
-      return trainingList;
     }else{
       throw response.reasonPhrase.toString();
     }
@@ -133,79 +89,6 @@ _comments: null, _assign: null, _liked_by: null, first_name: Ankit, middle_name:
 
       update();
       return topEmployersList;
-    }else{
-      throw response.reasonPhrase.toString();
-    }
-  }
-  Future<List<AllTrainingList>> getAllTrainingList(number)async{
-
-    String api = 'https://sailorfy.searchosis.com/api/resource/Enroll Member'
-        '?fields=["reference","status","institute_name","member","course_offered",'
-        '"course_rating","start_date","end_date","member_email","full_name",'
-        '"mobile_number","enroll_request"]&limit=100&order_by=name%20desc'
-        '&filters=[["mobile_number","=","$number"]]';
-    var headers = {
-      'Authorization': 'Token 006676296815f35:ee861eab5787f8d',
-      'Cookie': 'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
-    };
-    var response = await apiFunction.getMethod(api, headers);
-
-    if(response != null){
-      AllTrainingListModel allTrainingListModel = AllTrainingListModel.fromJson(response);
-      List<AllTrainingList> allTrainingList = allTrainingListModel.data;
-      update();
-      return allTrainingList;
-    }else{
-      throw response.reasonPhrase.toString();
-    }
-  }
-  Future<List<AllTrainingList>> getOnGoingTrainingList(number)async{
-
-    String api = 'https://sailorfy.searchosis.com/api/resource/Enroll Member'
-        '?fields=["reference","status","institute_name","member","course_offered",'
-        '"course_rating","start_date","end_date","member_email","full_name",'
-        '"mobile_number","enroll_request"]&limit=100&order_by=name%20desc'
-        '&filters=[["mobile_number","=","$number"],["status","=","Ongoing"]]';
-    var headers = {
-      'Authorization': 'Token 006676296815f35:ee861eab5787f8d',
-      'Cookie': 'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
-    };
-    var response = await apiFunction.getMethod(api, headers);
-
-    if(response != null){
-      AllTrainingListModel allTrainingListModel = AllTrainingListModel.fromJson(response);
-      List<AllTrainingList> allTrainingList = allTrainingListModel.data;
-
-      print(allTrainingList.length);
-      update();
-      return allTrainingList;
-    }else{
-      throw response.reasonPhrase.toString();
-    }
-  }
-  Future<List<AllTrainingList>> getHistoryTrainingList(number)async{
-
-    String api = 'https://sailorfy.searchosis.com/api/resource/Enroll Member'
-        '?fields=["reference","status","institute_name","member","course_offered",'
-        '"course_rating","start_date","end_date","member_email","full_name",'
-        '"mobile_number","enroll_request"]&limit=100&order_by=name%20desc'
-        '&filters=[["mobile_number","=","$number"],["status","=","Completed"]]';
-    var headers = {
-      'Authorization': 'Token 006676296815f35:ee861eab5787f8d',
-      'Cookie': 'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
-    };
-    var response = await apiFunction.getMethod(api, headers);
-
-    if(response != null){
-      print(response);
-
-      AllTrainingListModel allTrainingListModel = AllTrainingListModel.fromJson(response);
-      print('object1');
-      List<AllTrainingList> allTrainingList = allTrainingListModel.data;
-
-      print(allTrainingList.length);
-      update();
-      return allTrainingList;
     }else{
       throw response.reasonPhrase.toString();
     }

@@ -1,10 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:salorify/constant/bottom_bar.dart';
 import 'package:salorify/controller/dashboard_controller.dart';
 import 'package:salorify/model/certificate_list_model.dart';

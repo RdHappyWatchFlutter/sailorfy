@@ -1,13 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:salorify/constant/bottom_bar.dart';
-import 'package:salorify/constant/custom_appbar.dart';
-import 'package:salorify/constant/responsive.dart';
 import 'package:salorify/controller/dashboard_controller.dart';
-import 'package:salorify/model/user_data_model.dart';
 import 'package:salorify/view/pages/FirstTabScreens/first_home_page.dart';
 import 'package:salorify/view/pages/second_home_page.dart';
 import 'package:salorify/view/pages/third_home_page.dart';

@@ -2,11 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:salorify/controller/dashboard_controller.dart';
 import 'package:salorify/controller/verification_controller.dart';
-import 'package:salorify/view/static_app_bar.dart';
-import 'package:salorify/view/pages/FirstTabScreens/training_list_page.dart';
 
 import '../../constant/responsive.dart';
 

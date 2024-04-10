@@ -5,7 +5,6 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl_phone_number_field/intl_phone_number_field.dart';
 import 'package:salorify/api_function.dart';
 import 'package:http/http.dart' as http;

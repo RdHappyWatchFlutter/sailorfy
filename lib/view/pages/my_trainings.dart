@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:salorify/controller/dashboard_controller.dart';
+import 'package:salorify/controller/training_controller.dart';
 import 'package:salorify/model/all_training_list_model.dart';
-import 'package:salorify/view/pages/FirstTabScreens/traning_details_page.dart';
+
+import '../../model/training_list.dart';
 
 class MyTrainings extends StatefulWidget {
   final String number;
@@ -18,6 +20,7 @@ class MyTrainings extends StatefulWidget {
 
 class _MyTrainingsState extends State<MyTrainings> with TickerProviderStateMixin{
   final DashBoardController dashBoardController = Get.put(DashBoardController());
+  final TrainingController trainingController = Get.put(TrainingController());
   @override
   void initState() {
     dashBoardController.tabController = TabController(length: 3, vsync: this);
@@ -58,10 +61,10 @@ class _MyTrainingsState extends State<MyTrainings> with TickerProviderStateMixin
       body:  TabBarView(
         controller: dashBoardController.tabController,
         children: [
-          FutureBuilder<List<AllTrainingList>>(
-              future: dashBoardController.getAllTrainingList(widget.number),
+          FutureBuilder<List<TrainingList>>(
+              future: trainingController.trainingList(''),
               builder:
-                  (context, AsyncSnapshot<List<AllTrainingList>> response) {
+                  (context, AsyncSnapshot<List<TrainingList>> response) {
                 if (!response.hasData || response.hasError) {
                   return ListView.builder(
                     itemCount: 1, // Example itemCount
@@ -94,7 +97,7 @@ class _MyTrainingsState extends State<MyTrainings> with TickerProviderStateMixin
                         return GestureDetector(
                           onTap: () {
                            /* Navigator.push(context, MaterialPageRoute(
-                                builder: (context)=> TraningDetailsPage(
+                                builder: (context)=> TrainingDetailsPage(
                                     allTrainingList : data[index]
                                 )));*/
                           },
@@ -137,7 +140,7 @@ class _MyTrainingsState extends State<MyTrainings> with TickerProviderStateMixin
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            data[index].courseOffered,
+                                            data[index].courseName,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w900),
                                             overflow: TextOverflow.ellipsis,
@@ -172,10 +175,10 @@ class _MyTrainingsState extends State<MyTrainings> with TickerProviderStateMixin
                   );
                 }
               }),
-          FutureBuilder<List<AllTrainingList>>(
-              future: dashBoardController.getOnGoingTrainingList(widget.number),
+          FutureBuilder<List<TrainingList>>(
+              future: trainingController.trainingList('Ongoing'),
               builder:
-                  (context, AsyncSnapshot<List<AllTrainingList>> response) {
+                  (context, AsyncSnapshot<List<TrainingList>> response) {
                 if (!response.hasData || response.hasError) {
                   return ListView.builder(
                     itemCount: 1, // Example itemCount
@@ -208,7 +211,7 @@ class _MyTrainingsState extends State<MyTrainings> with TickerProviderStateMixin
                         return GestureDetector(
                           onTap: () {
                            /* Navigator.push(context, MaterialPageRoute(
-                                builder: (context)=> TraningDetailsPage(
+                                builder: (context)=> TrainingDetailsPage(
                                     allTrainingList : data[index]
                                 )));*/
                           },
@@ -286,10 +289,10 @@ class _MyTrainingsState extends State<MyTrainings> with TickerProviderStateMixin
                   );
                 }
               }),
-          FutureBuilder<List<AllTrainingList>>(
-              future: dashBoardController.getHistoryTrainingList(widget.number),
+          FutureBuilder<List<TrainingList>>(
+              future: trainingController.trainingList('Completed'),
               builder:
-                  (context, AsyncSnapshot<List<AllTrainingList>> response) {
+                  (context, AsyncSnapshot<List<TrainingList>> response) {
                 if (!response.hasData || response.hasError) {
                   return ListView.builder(
                     itemCount: 1, // Example itemCount
@@ -320,7 +323,7 @@ class _MyTrainingsState extends State<MyTrainings> with TickerProviderStateMixin
                         return GestureDetector(
                           onTap: () {
                           /*  Navigator.push(context, MaterialPageRoute(
-                                builder: (context)=> TraningDetailsPage(
+                                builder: (context)=> TrainingDetailsPage(
                                     allTrainingList : data[index]
                                 )));*/
                           },

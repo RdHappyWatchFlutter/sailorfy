@@ -54,18 +54,18 @@ class TrainingList {
   });
 
   factory TrainingList.fromJson(Map<String, dynamic> json) => TrainingList(
-    instituteId: json["institute_id"],
-    instituteName: json["institute_name"],
-    status: json["status"],
-    member: json["member"],
-    courseId: json["course_id"],
-    courseName: json["course_name"],
-    courseRating: json["course_rating"]?.toDouble(),
-    startDate: DateTime.parse(json["start_date"]),
-    endDate: DateTime.parse(json["end_date"]),
-    memberEmail: json["member_email"],
-    fullName: json["full_name"],
-    mobileNumber: json["mobile_number"],
+    instituteId: json["institute_id"] == null ? '' : json["institute_id"],
+    instituteName: json["institute_name"] == null ? '' : json["institute_name"],
+    status: json["status"] == null ? '' : json["status"],
+    member: json["member"] == null ? '' : json["member"],
+    courseId: json["course_id"] == null ? '' : json["course_id"],
+    courseName: json["course_name"] == null ? '' : json["course_name"],
+    courseRating: json["course_rating"] == null ? 0 : json["course_rating"]?.toDouble(),
+    startDate:  json["start_date"] == null ? DateTime.now() : DateTime.parse(json["start_date"]),
+    endDate: json["end_date"] == null ? DateTime.now() : DateTime.parse(json["end_date"]),
+    memberEmail: json["member_email"] == null ? '' : json["member_email"],
+    fullName: json["full_name"] == null ? '' : json["full_name"],
+    mobileNumber: json["mobile_number"] == null ? '' : json["mobile_number"],
   );
 
   Map<String, dynamic> toJson() => {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:salorify/controller/dashboard_controller.dart';
 import 'package:salorify/view/static_app_bar.dart';
 

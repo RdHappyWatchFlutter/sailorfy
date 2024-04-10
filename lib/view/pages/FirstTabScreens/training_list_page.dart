@@ -1,22 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:salorify/controller/dashboard_controller.dart';
-import 'package:salorify/model/training_detail.dart';
-import 'package:salorify/model/training_list_data_model.dart';
-import 'package:salorify/view/pages/FirstTabScreens/traning_details_page.dart';
+import 'package:salorify/view/pages/trainings/traning_details_page.dart';
 import 'package:salorify/view/static_app_bar.dart';
 
 import '../../../constant/responsive.dart';
+import '../../../controller/training_controller.dart';
 import '../../../model/training_list.dart';
 
 class TrainingListPage extends StatefulWidget {
-  final DashBoardController dashBoardController;
   final String number;
 
   const TrainingListPage(
-      {Key? key, required this.dashBoardController, required this.number})
+      {Key? key, required this.number})
       : super(key: key);
 
   @override
@@ -24,6 +23,12 @@ class TrainingListPage extends StatefulWidget {
 }
 
 class _TrainingListPageState extends State<TrainingListPage> {
+
+  final TrainingController trainingController =
+  Get.put(TrainingController());
+
+  final DashBoardController dashBoardController =
+  Get.put(DashBoardController());
   final List categoryList = [
     "Design",
     "Marine Tech",
@@ -54,13 +59,14 @@ class _TrainingListPageState extends State<TrainingListPage> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> TraningDetailsPage(
-                      courseName: data[index].name,
-                      courseNo: data[index].name,
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> TrainingDetailsPage(
+                      courseName: data[index].courseName,
+                      isActive: data[index].status,
+                      courseNo: data[index].courseId,
                     )));
                   },
                   child: _buildTrainingCard(
-                    data[index].name,
+                    data[index].courseName,
                     '5 months',
                     1.0,
                     '/files/inno.png',
@@ -150,7 +156,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               StaticAppBar(
-                  dashBoardController: widget.dashBoardController,
+                  dashBoardController: dashBoardController,
                   number: widget.number),
 
               Padding(
@@ -177,7 +183,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
               ),
 
               FutureBuilder<List<TrainingList>>(
-                  future: widget.dashBoardController.getPopularTrainingList(),
+                  future: trainingController.trainingList('Popular'),
                   builder:
                       (context, AsyncSnapshot<List<TrainingList>> response) {
                     if (!response.hasData || response.hasError) {
@@ -190,7 +196,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
                     }
                   }),
               FutureBuilder<List<TrainingList>>(
-                  future: widget.dashBoardController.getPopularTrainingList(),
+                  future: trainingController.trainingList('Marine'),
                   builder:
                       (context, AsyncSnapshot<List<TrainingList>> response) {
                     if (!response.hasData || response.hasError) {

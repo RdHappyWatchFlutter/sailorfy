@@ -112,10 +112,11 @@ class _OtpScreenState extends State<OtpScreen> {
 
                     });
                     if(loginController.enteredOtp == widget.otp){
-                      UserDataModel u = await dashBoardController.getUserData();
+                      List<UserData> userData = await dashBoardController.getUserData(widget.mobileNo.removeAllWhitespace);
                       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                       await sharedPreferences.setBool("loggedIn", true);
                       await sharedPreferences.setString("mobileNo", widget.mobileNo.removeAllWhitespace);
+                      await sharedPreferences.setString("member", userData[0].indosNo);
                       dashBoardController.loading = false;
                       setState(() {
 

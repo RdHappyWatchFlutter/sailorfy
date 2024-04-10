@@ -9,7 +9,6 @@ import 'package:salorify/controller/dashboard_controller.dart';
 import 'package:salorify/model/login_model.dart';
 import 'package:salorify/view/login_and_signup/otp_screen.dart';
 import 'package:salorify/view/login_and_signup/sign_up.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl_phone_number_field/intl_phone_number_field.dart';
 
 class LoginScreen extends StatefulWidget {
